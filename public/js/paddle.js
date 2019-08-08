@@ -38,6 +38,7 @@ function Paddle(side) {
         stopAtEdge,
         location,
         paddleHeight,
-        paddleWidth
+        paddleWidth,
+        side
     };
 }

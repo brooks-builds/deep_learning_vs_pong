@@ -2,8 +2,9 @@ function Ball() {
     const location = createVector(width / 2, height / 2);
     const size = 25;
     let color = 'white'
-    const speed = 5;
+    const speed = 15;
     const velocity = createVector(random(-1, 1), random(-1, 1));
+    // const velocity = createVector(1, 0);
 
     velocity.normalize();
     velocity.mult(speed);
@@ -29,8 +30,12 @@ function Ball() {
 
     const collideWithPaddle = (paddle) => {
         if (location.y > paddle.location.y && location.y < paddle.location.y + paddle.paddleHeight) {
-            if (location.x - size / 2 < paddle.location.x + paddle.paddleWidth && location.x + size / 2 > paddle.location.x) {
+            if (paddle.side === 'left' && location.x - size / 2 < paddle.location.x + paddle.paddleWidth && location.x + size / 2 > paddle.location.x) {
                 location.x = paddle.location.x + paddle.paddleWidth + size / 2;
+                velocity.x = velocity.x * -1;
+            }
+            else if (location.x + size / 2 > paddle.location.x && location.x + size / 2 < paddle.location.x + paddle.paddleWidth) {
+                location.x = paddle.location.x - size / 2;
                 velocity.x = velocity.x * -1;
             }
             color = 'red';
@@ -43,6 +48,7 @@ function Ball() {
         render,
         bounceOnWalls,
         move,
-        collideWithPaddle
+        collideWithPaddle,
+        location
     };
 }
