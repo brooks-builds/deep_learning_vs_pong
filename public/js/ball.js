@@ -1,13 +1,19 @@
 function Ball() {
-    const location = createVector(width / 2, height / 2);
+    let location;
     const size = 25;
     let color = 'white'
-    const speed = 15;
-    const velocity = createVector(random(-1, 1), random(-1, 1));
-    // const velocity = createVector(1, 0);
+    const speed = 12;
+    let velocity;
 
-    velocity.normalize();
-    velocity.mult(speed);
+
+    const setup = () => {
+        location = createVector(width / 2, height / 2);
+        velocity = createVector(1, random(-0.8, -0.4));
+
+        velocity.normalize();
+        velocity.mult(speed);
+    }
+
 
     const render = () => {
         fill(color);
@@ -44,11 +50,29 @@ function Ball() {
         }
     }
 
+    const isBallOffScreen = () => {
+        return location.x < 0 || location.x > width;
+    }
+
+    const didPlayerWin = () => {
+        return location.x > width;
+    }
+
+    const reset = () => {
+        setup();
+    };
+
+    setup();
+
     return {
         render,
         bounceOnWalls,
         move,
         collideWithPaddle,
-        location
+        location,
+        isBallOffScreen,
+        didPlayerWin,
+        reset,
+        velocity
     };
 }
