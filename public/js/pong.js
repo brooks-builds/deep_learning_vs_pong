@@ -6,6 +6,7 @@ let paddles = {
 let ai;
 let state = 'not started';
 const record = Record();
+let sentData = false;
 
 function setup() {
     const canvas = createCanvas(920, 700);
@@ -15,6 +16,7 @@ function setup() {
     paddles.player = Paddle('left')
     paddles.ai = Paddle('right')
     ai = Ai();
+    frameRate(60);
 }
 
 function draw() {
@@ -29,13 +31,16 @@ function draw() {
             state = 'running'
         }
     } else if (state === 'game over') {
-        console.log(record);
         textSize(32);
         fill(255);
         textAlign(CENTER, CENTER);
 
         if (ball.didPlayerWin()) {
             text('You Win!', width / 2, 250);
+            if (!sentData) {
+                sendRecord();
+                sentData = true;
+            }
         } else {
             text('You Lost!', width / 2, 250);
         }
@@ -80,7 +85,9 @@ function draw() {
             state = 'game over';
         }
 
-        record.recordInput(ball, paddles.player, keyPressed);
+        if (frameCount % 30 === 0) {
+            record.recordInput(ball, paddles.player, keyPressed);
+        }
     }
 }
 
@@ -88,4 +95,16 @@ function reset() {
     paddles.player = Paddle('left');
     paddles.ai = Paddle('right');
     ball = Ball()
+}
+
+function sendRecord() {
+    const apiUrl = '//localhost:3000/api/record-game';
+    const data = {
+        inputs: record.inputs,
+        outputs: record.outputs
+    };
+
+    httpPost(apiUrl, 'json', data, result => {
+        console.log(result);
+    });
 }

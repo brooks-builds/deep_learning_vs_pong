@@ -7,7 +7,7 @@ function Paddle(side) {
         'right': createVector(width - paddleWidth - 10, height / 2 - paddleHeight / 2)
     }
     let location = paddleSide[side];
-    const speed = 11;
+    const speed = 8;
 
     const render = () => {
         fill(color);
