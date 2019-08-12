@@ -12,9 +12,9 @@ app.use(bodyParser.json())
 
 app.get('/health', (request, response) => response.json({ message: 'healthy' }));
 app.post('/api/record-game', (request, response) => {
-    neuralNetwork(request.body.inputs, request.body.outputs);
+    const weights = neuralNetwork(request.body.inputs, request.body.outputs);
 
-    response.json({ message: 'received' });
+    response.json({ message: 'received', weights });
 });
 
 

@@ -8,7 +8,7 @@ function Ball() {
 
     const setup = () => {
         location = createVector(width / 2, height / 2);
-        velocity = createVector(1, random(-0.8, -0.4));
+        velocity = createVector(1, random(-0.4, 0.4));
 
         velocity.normalize();
         velocity.mult(speed);
