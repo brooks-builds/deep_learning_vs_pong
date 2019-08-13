@@ -5,13 +5,7 @@ let paddles = {
 };
 let ai;
 let state = 'not started';
-const record = Record();
-let sentData = false;
-const neuralNetworkWeights = {
-    layer1: null,
-    layer2: null
-};
-let switchingToNeuralNetwork = false
+let neuralNetworkWeights;
 
 function setup() {
     const canvas = createCanvas(920, 700);
@@ -22,6 +16,7 @@ function setup() {
     paddles.ai = Paddle('right')
     ai = Ai();
     frameRate(60);
+    neuralNetwork = NeuralNetwork();
 }
 
 function draw() {
@@ -41,12 +36,9 @@ function draw() {
         textAlign(CENTER, CENTER);
 
         if (ball.didPlayerWin()) {
-            text('You Win!', width / 2, 250);
-            if (!sentData) {
-                sentData = true;
-            }
+            text('I am the winner!', width / 2, 250);
         } else {
-            text('You Lost!', width / 2, 250);
+            text("Simple AI's still rule!", width / 2, 250);
         }
 
         text('Press return to start again!', width / 2, height / 2);
@@ -56,8 +48,6 @@ function draw() {
             state = 'running'
         }
     } else {
-        let keyPressed;
-
         ball.render();
         paddles.player.render();
         paddles.ai.render();
@@ -85,15 +75,12 @@ function draw() {
             paddles.ai.moveDown();
         }
 
-        if (neuralNetworkWeights.layer1) {
-            text('network playing', 0, 0);
-            const neuralNetworkMove = neuralNetwork(ball, paddles.player, neuralNetworkWeights);
+        const neuralNetworkMove = neuralNetwork(ball, paddles.player);
 
-            if (neuralNetworkMove === 'up') {
-                paddles.player.moveUp();
-            } else if (neuralNetworkMove === 'down') {
-                paddles.player.moveDown();
-            }
+        if (neuralNetworkMove === 'up') {
+            paddles.player.moveUp();
+        } else if (neuralNetworkMove === 'down') {
+            paddles.player.moveDown();
         }
 
         if (ball.isBallOffScreen()) {
@@ -106,80 +93,4 @@ function reset() {
     paddles.player = Paddle('left');
     paddles.ai = Paddle('right');
     ball = Ball()
-}
-
-function sendRecord() {
-    const apiUrl = '//localhost:3000/api/record-game';
-    const data = {
-        inputs: record.inputs,
-        outputs: record.outputs
-    };
-
-    httpPost(apiUrl, 'json', data, result => {
-        neuralNetworkWeights.layer1 = result.weights.layer1Weights;
-        neuralNetworkWeights.layer2 = result.weights.layer2Weights;
-    });
-}
-
-function neuralNetwork(ball, paddle, weights) {
-    const input = [
-        ball.location.x,
-        ball.location.y,
-        ball.velocity.x,
-        ball.velocity.y,
-        paddle.location.x,
-        paddle.location.y
-    ];
-
-    const layer1 = relu(dotVectorMatrix(input, weights.layer1));
-    const layer2 = Math.round(dotVectorMatrix(layer1, weights.layer2));
-    console.log(layer2);
-
-    if (layer2 > 0) {
-        return 'up';
-    } else if (layer2 < 0) {
-        return 'down';
-    }
-}
-
-function relu(vector) {
-    return vector.map(item => (item > 0 ? item : 0));
-}
-
-function dotVectorMatrix(vector, matrix) {
-    return transpose(matrix).map(row => dot(vector, row));
-}
-
-function dot(vector1, vector2) {
-    if (vector1.length !== vector2.length)
-        throw new Error("vectors must be same length");
-
-    return vectorMultiply(vector1, vector2).reduce(
-        (sum, number) => sum + number,
-        0
-    );
-}
-
-function transpose(matrix) {
-    const transposedMatrix = [];
-
-    for (
-        let matrixWidthIndex = 0;
-        matrixWidthIndex < matrix[0].length;
-        matrixWidthIndex = matrixWidthIndex + 1
-    ) {
-        const newRow = [];
-
-        matrix.forEach(row => newRow.push(row[matrixWidthIndex]));
-
-        transposedMatrix.push(newRow);
-    }
-
-    return transposedMatrix;
-}
-
-function vectorMultiply(vector1, vector2) {
-    if (vector1.length !== vector2.length)
-        throw new Error("vectors must be same length");
-    return vector1.map((firstNumber, index) => firstNumber * vector2[index]);
 }
