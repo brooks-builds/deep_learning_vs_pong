@@ -5,7 +5,7 @@ let paddles = {
 };
 let ai;
 let state = 'not started';
-let neuralNetworkWeights;
+const neuralNetwork = {};
 
 function setup() {
     const canvas = createCanvas(920, 700);
@@ -16,7 +16,9 @@ function setup() {
     paddles.ai = Paddle('right')
     ai = Ai();
     frameRate(60);
-    neuralNetwork = NeuralNetwork();
+    NeuralNetwork()
+        .then(fn => neuralNetwork.decision = fn)
+        .then(() => state = 'playing');
 }
 
 function draw() {
@@ -75,7 +77,7 @@ function draw() {
             paddles.ai.moveDown();
         }
 
-        const neuralNetworkMove = neuralNetwork(ball, paddles.player);
+        const neuralNetworkMove = neuralNetwork.decision(ball, paddles.player);
 
         if (neuralNetworkMove === 'up') {
             paddles.player.moveUp();

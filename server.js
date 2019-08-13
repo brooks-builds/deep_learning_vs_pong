@@ -11,8 +11,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.get('/health', (request, response) => response.json({ message: 'healthy' }));
-app.post('/api/record-game', (request, response) => {
-    const weights = neuralNetwork(request.body.inputs, request.body.outputs);
+app.post('/api/get-weights', (request, response) => {
+    const weights = neuralNetwork(request.body);
 
     response.json({ message: 'received', weights });
 });
