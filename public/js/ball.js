@@ -2,13 +2,13 @@ function Ball() {
     let location;
     const size = 25;
     let color = 'white'
-    const speed = 12;
+    const speed = 11;
     let velocity;
 
 
     const setup = () => {
         location = createVector(width / 2, height / 2);
-        velocity = createVector(1, random(-0.4, 0.4));
+        velocity = createVector(1, -0.5);
 
         velocity.normalize();
         velocity.mult(speed);

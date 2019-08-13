@@ -22,7 +22,6 @@ function setup() {
     paddles.ai = Paddle('right')
     ai = Ai();
     frameRate(60);
-    sendRecord();
 }
 
 function draw() {

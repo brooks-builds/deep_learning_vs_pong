@@ -32,7 +32,6 @@ function Record() {
 
     return {
         inputs,
-        outputs,
-        recordInput
+        outputs
     };
 }

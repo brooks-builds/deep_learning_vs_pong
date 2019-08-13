@@ -13,7 +13,11 @@ const {
     dotMatrix
 } = require('./functions');
 
-function neuralNetwork(layer0, whatHappened) {
+const gameInputs = [
+
+]
+
+function neuralNetwork() {
     let alpha = 0.001;
     const hiddenSize = 6;
     let layer1Weights = createRandomMatrix(layer0[0].length, hiddenSize);
