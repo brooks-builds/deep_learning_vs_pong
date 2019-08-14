@@ -2,7 +2,7 @@ function Ball() {
     let location;
     const size = 25;
     let color = 'white'
-    let speed = 10;
+    let speed = 8;
     let velocity;
 
 
