@@ -21,7 +21,7 @@ function neuralNetwork(data) {
     let layer2Weights = createRandomMatrix(hiddenSize, 1);
     let layer2Errors = 0;
 
-    for (let training = 0; training < 100000; training = training + 1) {
+    for (let training = 0; training < 1000000; training = training + 1) {
         if (training % 1000 === 0) previousErrors = layer2Errors;
 
         layer2Errors = 0;
@@ -48,7 +48,7 @@ function neuralNetwork(data) {
             console.log('error: ', layer2Errors);
             console.log('accuracy: ', calculateAccuracy(testingData, layer1Weights, layer2Weights));
 
-            if (layer2Errors < 0.001) {
+            if (layer2Errors < 0.1) {
                 break;
             }
         }

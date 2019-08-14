@@ -2,7 +2,7 @@ function Ball() {
     let location;
     const size = 25;
     let color = 'white'
-    const speed = 11;
+    let speed = 10;
     let velocity;
 
 
@@ -39,14 +39,25 @@ function Ball() {
             if (paddle.side === 'left' && location.x - size / 2 < paddle.location.x + paddle.paddleWidth && location.x + size / 2 > paddle.location.x) {
                 location.x = paddle.location.x + paddle.paddleWidth + size / 2;
                 velocity.x = velocity.x * -1;
+                speed = speed + 0.1;
+
+                const ballHitLocationY = location.y - paddle.location.y;
+                velocity.y = (ballHitLocationY - paddle.paddleHeight / 2) / 5;
+                velocity.normalize();
+                velocity.x = 1;
+                velocity.mult(speed);
             }
             else if (location.x + size / 2 > paddle.location.x && location.x + size / 2 < paddle.location.x + paddle.paddleWidth) {
                 location.x = paddle.location.x - size / 2;
                 velocity.x = velocity.x * -1;
+
+                const ballHitLocationY = location.y - paddle.location.y;
+                velocity.y = (ballHitLocationY - paddle.paddleHeight / 2) / 5;
+                velocity.normalize();
+                velocity.x = -1;
+                velocity.mult(speed);
             }
-            color = 'red';
-        } else {
-            color = 'white';
+
         }
     }
 

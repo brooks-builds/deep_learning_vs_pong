@@ -104,15 +104,31 @@ function NeuralNetwork() {
         }
     };
 
+    const saveWeights = () => {
+        storeItem('weights', weights);
+    };
+
+    const loadWeights = () => {
+        const storedWeights = getItem('weights');
+
+        weights.layer1 = storedWeights.layer1;
+        weights.layer2 = storedWeights.layer2;
+    };
+
     const trainingData = generateTrainingData(100);
     const testingData = generateTrainingData(600);
 
-    return getWeights({ trainingData, testingData })
+    getWeights({ trainingData, testingData })
         .then(response => {
             weights.layer1 = response.weights.layer1Weights,
                 weights.layer2 = response.weights.layer2Weights
-        })
-        .then(() => decision);
+        });
+
+    return {
+        decision,
+        loadWeights,
+        saveWeights
+    };
 }
 
 function relu(vector) {
