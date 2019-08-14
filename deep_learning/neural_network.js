@@ -49,7 +49,7 @@ function neuralNetwork(data) {
             const accuracy = calculateAccuracy(testingData, layer1Weights, layer2Weights);
             process.stdout.write(`accuracy: ${(accuracy * 100).toFixed(2)}%  |  errors: ${layer2Errors.toFixed(15)} | iterations left: ${maxTrainingIterations - training}                  \r`);
 
-            if (layer2Errors < 0.001 || accuracy > 0.985) {
+            if (layer2Errors < 0.001 || accuracy > 0.60) {
                 console.log('\nfinished training');
                 break;
             }
