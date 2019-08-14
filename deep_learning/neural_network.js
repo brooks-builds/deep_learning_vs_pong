@@ -20,8 +20,9 @@ function neuralNetwork(data) {
     let layer1Weights = createRandomMatrix(trainingData.inputs[0].length, hiddenSize);
     let layer2Weights = createRandomMatrix(hiddenSize, 1);
     let layer2Errors = 0;
+    const maxTrainingIterations = 1000000;
 
-    for (let training = 0; training < 1000000; training = training + 1) {
+    for (let training = 0; training < maxTrainingIterations; training = training + 1) {
         if (training % 1000 === 0) previousErrors = layer2Errors;
 
         layer2Errors = 0;
@@ -45,10 +46,11 @@ function neuralNetwork(data) {
 
         if (training % 10 === 0) {
             if (isNaN(layer2Errors)) throw new Error('error too big or too small');
-            console.log('error: ', layer2Errors);
-            console.log('accuracy: ', calculateAccuracy(testingData, layer1Weights, layer2Weights));
+            const accuracy = calculateAccuracy(testingData, layer1Weights, layer2Weights);
+            process.stdout.write(`accuracy: ${(accuracy * 100).toFixed(2)}%  |  errors: ${layer2Errors.toFixed(15)} | iterations left: ${maxTrainingIterations - training}                  \r`);
 
-            if (layer2Errors < 0.1) {
+            if (layer2Errors < 0.001 || accuracy > 0.999) {
+                console.log('finished training');
                 break;
             }
         }

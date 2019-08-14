@@ -1,5 +1,5 @@
 function Paddle(side) {
-    const paddleHeight = 50;
+    const paddleHeight = 100;
     const paddleWidth = 20;
     const color = 255;
     const paddleSide = {
