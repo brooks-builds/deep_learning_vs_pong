@@ -43,14 +43,15 @@ function neuralNetwork(data) {
 
             secondNeuronWeights = matrixSubtract(secondNeuronWeights, limitedWeightedFinalDeltas);
 
-            firstNeuronWeights = matrixSubtract(
-                firstNeuronWeights,
-                scalarMatrixMultiply(weightUpdateLimiter, dotMatrix(transpose([currentInputs]), firstPredictionDeltas))
-            ); 1
+            const weightedFirstDeltas = dotMatrix(transpose([currentInputs]), firstPredictionDeltas);
+            const limitedWeightedFirstDeltas = scalarMatrixMultiply(weightUpdateLimiter, weightedFirstDeltas);
+
+            firstNeuronWeights = matrixSubtract(firstNeuronWeights, limitedWeightedFirstDeltas);
         });
 
         if (training % 10 === 0) {
             if (isNaN(totalErrors)) throw new Error('error too big or too small');
+
             const accuracy = calculateAccuracy(testingData, firstNeuronWeights, secondNeuronWeights);
             process.stdout.write(`accuracy: ${(accuracy * 100).toFixed(2)}%  |  errors: ${totalErrors.toFixed(15)} | iterations left: ${maxTrainingIterations - training}                  \r`);
 
