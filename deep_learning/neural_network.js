@@ -25,17 +25,17 @@ function neuralNetwork(data) {
 
         trainingData.inputs.forEach((currentInputs, trainingDataIndex) => {
             const firstPredictions = dotVectorMatrix(currentInputs, firstNeuronWeights);
-            //             const deactivatedFirstPredictions = relu(firstPredictions);
-            //             const finalPredictions = dotVectorMatrix(deactivatedFirstPredictions, secondNeuronWeights);
-            //             const finalPredictionsDelta = finalPredictions[0] - trainingData.outputs[trainingDataIndex];
-            //             const finalPredictionsErrors = Math.pow(finalPredictionsDelta, 2);
+            const deactivatedFirstPredictions = relu(firstPredictions);
+            const finalPredictions = dotVectorMatrix(deactivatedFirstPredictions, secondNeuronWeights);
+            const finalPredictionsDelta = finalPredictions[0] - trainingData.outputs[trainingDataIndex];
+            const finalPredictionsErrors = Math.pow(finalPredictionsDelta, 2);
 
-            //             totalErrors = totalErrors + finalPredictionsErrors;
+            totalErrors = totalErrors + finalPredictionsErrors;
 
-            //             const firstPredictionsdeltas = dotVectorMatrix([finalPredictionsDelta], transpose(secondNeuronWeights));
-            //             const firstPredictionsDerivatives = reluToDerivative(deactivatedFirstPredictions);
-            //             const deactivatedFirstPredictionsDeltas = matrixMultiply([firstPredictionsdeltas], [firstPredictionsDerivatives]);
-            //             const weightedFinalDeltas = dotMatrix(transpose([deactivatedFirstPredictions]), [[finalPredictionsDelta]]);
+            const firstPredictionsdeltas = dotVectorMatrix([finalPredictionsDelta], transpose(secondNeuronWeights));
+            const firstPredictionsDerivatives = reluToDerivative(deactivatedFirstPredictions);
+            const deactivatedFirstPredictionsDeltas = matrixMultiply([firstPredictionsdeltas], [firstPredictionsDerivatives]);
+            const weightedFinalDeltas = dotMatrix(transpose([deactivatedFirstPredictions]), [[finalPredictionsDelta]]);
             //             const limitedWeightedFinalDeltas = scalarMatrixMultiply(weightUpdateLimiter, weightedFinalDeltas);
 
             //             secondNeuronWeights = matrixSubtract(secondNeuronWeights, limitedWeightedFinalDeltas);

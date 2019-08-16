@@ -23,33 +23,43 @@ function dotVectorMatrix(vector, matrix) {
 }
 
 function transpose(matrix) {
-    const newMatrix = []
+    const transposedMatrix = [];
 
-    for (let columnIndex = 0; columnIndex < matrix[0].length; columnIndex = columnIndex + 1) {
-        newMatrix.push(matrix.map(row => row[columnIndex]))
+    for (
+        let matrixWidthIndex = 0;
+        matrixWidthIndex < matrix[0].length;
+        matrixWidthIndex = matrixWidthIndex + 1
+    ) {
+        const newRow = [];
+
+        matrix.forEach(row => newRow.push(row[matrixWidthIndex]));
+
+        transposedMatrix.push(newRow);
     }
 
-    return newMatrix
+    return transposedMatrix;
 }
 
 function dot(vector1, vector2) {
-
+    return vector1.reduce((weightedSum, vector1Value, index) => weightedSum + vector1Value * vector2[index], 0)
 }
 
 function relu(vector) {
-
+    return vector.map(value => value > 0 ? value : 0)
 }
 
 function reluToDerivative(vector) {
-
+    return vector.map(value => value > 0 ? 1 : 0)
 }
 
 function matrixMultiply(matrix1, matrix2) {
-
+    return matrix1.map((matrix1Row, rowIndex) => matrix1Row.map((value, columnIndex) => value * matrix2[rowIndex][columnIndex]))
 }
 
 function dotMatrix(matrix1, matrix2) {
+    const transposedMatrix = transpose(matrix2)
 
+    return matrix1.map((matrix1Row, rowIndex) => dot(matrix1Row, transposedMatrix[rowIndex]))
 }
 
 function scalarMatrixMultiply(scalar, matrix) {
