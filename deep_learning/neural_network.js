@@ -12,7 +12,7 @@ const {
 
 function neuralNetwork(data) {
     const { trainingData, testingData } = data;
-    let weightUpdateLimiter = 0.0001; // alpha
+    let weightUpdateLimiter = 0.00001; // alpha
     const numberOfFirstPredictions = 10; // hidden layer
     const numberOfInputs = trainingData.inputs[0].length;
     const numberOfFinalOutputs = 1;
@@ -46,12 +46,12 @@ function neuralNetwork(data) {
             firstNeuronWeights = matrixSubtract(firstNeuronWeights, limitedWeightedFirstDeltas);
         });
 
-        if (training % 100 === 0) {
+        if (training % 1 === 0) {
             if (isNaN(totalErrors)) throw new Error('error too big or too small');
 
             const accuracy = calculateAccuracy(testingData, firstNeuronWeights, secondNeuronWeights);
 
-            if (accuracy > 0.95) weightUpdateLimiter = 0.00001
+            if (totalErrors < 2) weightUpdateLimiter = 0.00001
 
             process.stdout.write(`accuracy: ${(accuracy * 100).toFixed(2)}%  |  errors: ${totalErrors.toFixed(15)} | iterations left: ${maxTrainingIterations - training}                  \r`);
 

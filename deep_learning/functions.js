@@ -44,6 +44,10 @@ function reluToDerivative(vector) {
     return vector.map(value => value > 0 ? 1 : 0);
 }
 
+function matrixMultiply(matrix1, matrix2) {
+    return matrix1.map((matrix1Row, rowIndex) => matrix1Row.map((matrix1Column, columnIndex) => matrix1Column * matrix2[rowIndex][columnIndex]))
+}
+
 function dotMatrix(matrix1, matrix2) {
     const transposedMatrix = transpose(matrix2)
     const newMatrix = []
@@ -73,6 +77,10 @@ function vectorSubtract(vector1, vector2) {
     return vector1.map((vector1Value, index) => vector1Value - vector2[index])
 }
 
+// function vectorMultiply(vector1, vector2) {
+
+// }
+
 module.exports = {
     createRandomMatrix,
     relu,
@@ -84,5 +92,6 @@ module.exports = {
     scalarMatrixMultiply,
     scalarVectorMultiply,
     matrixSubtract,
-    dotMatrix
+    dotMatrix,
+    matrixMultiply
 };

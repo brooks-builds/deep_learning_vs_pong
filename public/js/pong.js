@@ -128,14 +128,14 @@ function draw() {
 
     textAlign(CENTER);
     if (score.neuralNetwork > score.ai) {
-        fill('red');
+        fill('light-red');
     } else {
         fill('white');
     }
     text(score.neuralNetwork, width / 2 - 25, 25);
     rect(width / 2 - 2, 0, 4, 50);
     if (score.ai > score.neuralNetwork) {
-        fill('red');
+        fill('light-red');
     } else {
         fill('white');
     }

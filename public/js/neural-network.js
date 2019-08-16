@@ -56,6 +56,7 @@ function NeuralNetwork() {
     };
 
     const calculateInterceptPoint = (paddleLocation, ballVelocity, ballLocation) => {
+        // using the slope algorithm
         let velocityScalar = ballVelocity.y / ballVelocity.x;
 
         velocityScalar = velocityScalar * (paddleLocation.x - ballLocation.x);
