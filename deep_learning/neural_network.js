@@ -36,9 +36,9 @@ function neuralNetwork(data) {
             const firstPredictionsDerivatives = reluToDerivative(deactivatedFirstPredictions);
             const deactivatedFirstPredictionsDeltas = matrixMultiply([firstPredictionsdeltas], [firstPredictionsDerivatives]);
             const weightedFinalDeltas = dotMatrix(transpose([deactivatedFirstPredictions]), [[finalPredictionsDelta]]);
-            //             const limitedWeightedFinalDeltas = scalarMatrixMultiply(weightUpdateLimiter, weightedFinalDeltas);
+            const limitedWeightedFinalDeltas = scalarMatrixMultiply(weightUpdateLimiter, weightedFinalDeltas);
 
-            //             secondNeuronWeights = matrixSubtract(secondNeuronWeights, limitedWeightedFinalDeltas);
+            secondNeuronWeights = matrixSubtract(secondNeuronWeights, limitedWeightedFinalDeltas);
 
             //             const weightedFirstDeltas = dotMatrix(transpose([currentInputs]), deactivatedFirstPredictionsDeltas);
             //             const limitedWeightedFirstDeltas = scalarMatrixMultiply(weightUpdateLimiter, weightedFirstDeltas);

@@ -57,13 +57,19 @@ function matrixMultiply(matrix1, matrix2) {
 }
 
 function dotMatrix(matrix1, matrix2) {
-    const transposedMatrix = transpose(matrix2)
-
-    return matrix1.map((matrix1Row, rowIndex) => dot(matrix1Row, transposedMatrix[rowIndex]))
+    return matrix1.map(matrix1row =>
+        transpose(matrix2).map(matrix2Row => dot(matrix1row, matrix2Row))
+    );
 }
 
 function scalarMatrixMultiply(scalar, matrix) {
+    const newMatrix = [];
 
+    for (let rowIndex = 0; rowIndex < matrix.length; rowIndex = rowIndex + 1) {
+        newMatrix.push(matrix[rowIndex].map(value => scalar * value))
+    }
+
+    return newMatrix
 }
 
 function scalarVectorMultiply(scalar, vector) {
