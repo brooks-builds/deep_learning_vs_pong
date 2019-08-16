@@ -44,10 +44,9 @@ function draw() {
     fill(255);
     if (state === 'not started') {
         textAlign(CENTER, CENTER);
-        text('Press Enter to Start', width / 2, 250);
-
-        if (keyIsDown(ENTER)) {
-            state = 'running'
+        text('Training...', width / 2, 250);
+        if (neuralNetwork.areWeightsLoaded()) {
+            state = 'playing';
         }
     } else if (state === 'game over') {
         textSize(32);

@@ -3,6 +3,7 @@ function NeuralNetwork() {
         layer1: null,
         layer2: null
     };
+    let weightsLoaded = false;
 
     const generateTrainingData = (count) => {
         const inputs = [];
@@ -113,21 +114,26 @@ function NeuralNetwork() {
 
         weights.layer1 = storedWeights.layer1;
         weights.layer2 = storedWeights.layer2;
+        weightsLoaded = true;
     };
+
+    const areWeightsLoaded = () => weightsLoaded;
 
     const trainingData = generateTrainingData(100);
     const testingData = generateTrainingData(600);
 
     getWeights({ trainingData, testingData })
         .then(response => {
-            weights.layer1 = response.weights.layer1Weights,
-                weights.layer2 = response.weights.layer2Weights
+            weights.layer1 = response.weights.firstNeuronWeights
+            weights.layer2 = response.weights.secondNeuronWeights
+            weightsLoaded = true
         });
 
     return {
         decision,
         loadWeights,
-        saveWeights
+        saveWeights,
+        areWeightsLoaded
     };
 }
 

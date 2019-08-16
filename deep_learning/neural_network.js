@@ -2,11 +2,8 @@ const {
     relu,
     dotVectorMatrix,
     createRandomMatrix,
-    vectorSubtract,
     transpose,
-    vectorMultiply,
     reluToDerivative,
-    outerProduct,
     scalarMatrixMultiply,
     matrixSubtract,
     matrixMultiply,
@@ -16,12 +13,12 @@ const {
 function neuralNetwork(data) {
     const { trainingData, testingData } = data;
     let weightUpdateLimiter = 0.0001; // alpha
-    const numberOfFirstPredictions = trainingData.inputs[0].length + 1; // hidden layer
+    const numberOfFirstPredictions = 10; // hidden layer
     const numberOfInputs = trainingData.inputs[0].length;
-    let firstNeuronWeights = createRandomMatrix(numberOfInputs, numberOfFirstPredictions);
     const numberOfFinalOutputs = 1;
+    let firstNeuronWeights = createRandomMatrix(numberOfInputs, numberOfFirstPredictions);
     let secondNeuronWeights = createRandomMatrix(numberOfFirstPredictions, numberOfFinalOutputs);
-    const maxTrainingIterations = 100000;
+    const maxTrainingIterations = 1000000;
 
     for (let training = 0; training < maxTrainingIterations; training = training + 1) {
         let totalErrors = 0;
@@ -37,26 +34,28 @@ function neuralNetwork(data) {
 
             const firstPredictionsdeltas = dotVectorMatrix([finalPredictionsDelta], transpose(secondNeuronWeights));
             const firstPredictionsDerivatives = reluToDerivative(deactivatedFirstPredictions);
-            const firstPredictionDeltas = matrixMultiply([firstPredictionsdeltas], [firstPredictionsDerivatives]);
+            const deactivatedFirstPredictionsDeltas = matrixMultiply([firstPredictionsdeltas], [firstPredictionsDerivatives]);
             const weightedFinalDeltas = dotMatrix(transpose([deactivatedFirstPredictions]), [[finalPredictionsDelta]]);
             const limitedWeightedFinalDeltas = scalarMatrixMultiply(weightUpdateLimiter, weightedFinalDeltas);
 
             secondNeuronWeights = matrixSubtract(secondNeuronWeights, limitedWeightedFinalDeltas);
 
-            const weightedFirstDeltas = dotMatrix(transpose([currentInputs]), firstPredictionDeltas);
+            const weightedFirstDeltas = dotMatrix(transpose([currentInputs]), deactivatedFirstPredictionsDeltas);
             const limitedWeightedFirstDeltas = scalarMatrixMultiply(weightUpdateLimiter, weightedFirstDeltas);
 
             firstNeuronWeights = matrixSubtract(firstNeuronWeights, limitedWeightedFirstDeltas);
         });
 
-        if (training % 10 === 0) {
+        if (training % 100 === 0) {
             if (isNaN(totalErrors)) throw new Error('error too big or too small');
 
             const accuracy = calculateAccuracy(testingData, firstNeuronWeights, secondNeuronWeights);
+
+            if (accuracy > 0.95) weightUpdateLimiter = 0.00001
+
             process.stdout.write(`accuracy: ${(accuracy * 100).toFixed(2)}%  |  errors: ${totalErrors.toFixed(15)} | iterations left: ${maxTrainingIterations - training}                  \r`);
 
             if (totalErrors < 0.001 || accuracy > 0.985) {
-                console.log('\nfinished training');
                 break;
             }
         }

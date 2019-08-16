@@ -1,78 +1,76 @@
 function createRandomMatrix(rows, columns) {
-    const matrix = [];
+    const matrix = []
 
-    for (let _rowCount = 0; _rowCount < rows; _rowCount = _rowCount + 1) {
-        const row = [];
+    for (let rowIndex = 0; rowIndex < rows; rowIndex = rowIndex + 1) {
+        const newRow = []
 
-        for (let _columnCount = 0; _columnCount < columns; _columnCount = _columnCount + 1) {
-            const randomNumber = Math.random() * 2 - 1;
+        for (let columnIndex = 0; columnIndex < columns; columnIndex = columnIndex + 1) {
+            const randomNumber = Math.random() * 2 - 1
 
-            row.push(randomNumber);
+            newRow.push(randomNumber)
         }
 
-        matrix.push(row);
+        matrix.push(newRow)
     }
 
-    return matrix;
-}
-
-function transpose(matrix) {
-    const transposedMatrix = [];
-
-    for (let columnIndex = 0; columnIndex < matrix[0].length; columnIndex = columnIndex + 1) {
-        transposedMatrix.push(matrix.map(row => row[columnIndex]));
-    }
-
-    return transposedMatrix;
-}
-
-function dot(vector1, vector2) {
-    return vector1.reduce((weightedSum, value, index) => weightedSum + (value * vector2[index]), 0);
+    return matrix
 }
 
 function dotVectorMatrix(vector, matrix) {
-    return transpose(matrix).map(row => dot(vector, row));
+    const transposedMatrix = transpose(matrix)
+
+    return transposedMatrix.map(row => dot(vector, row));
+}
+
+function transpose(matrix) {
+    const transposedMatrix = []
+
+    for (let columnIndex = 0; columnIndex < matrix[0].length; columnIndex = columnIndex + 1) {
+        transposedMatrix.push(matrix.map(row => row[columnIndex]))
+    }
+
+    return transposedMatrix
+}
+
+function dot(vector1, vector2) {
+    return vector1.reduce((weightedSum, vector1Value, index) => weightedSum + vector1Value * vector2[index], 0)
 }
 
 function relu(vector) {
-    return vector.map(value => value > 0 ? value : 0);
+    return vector.map(value => value > 0 ? value : 0)
 }
 
 function reluToDerivative(vector) {
     return vector.map(value => value > 0 ? 1 : 0);
 }
 
-function vectorMultiply(vector1, vector2) {
-    return vector1.map((vector1Value, index) => vector1Value * vector2[index]);
-}
-
 function dotMatrix(matrix1, matrix2) {
-    return matrix1.map(matrix1Row => {
-        const newRow = transpose(matrix2).map(matrix2Row => dot(matrix1Row, matrix2Row));
+    const transposedMatrix = transpose(matrix2)
+    const newMatrix = []
 
-        return newRow;
-    });
-}
+    for (let rowIndex = 0; rowIndex < matrix1.length; rowIndex = rowIndex + 1) {
+        const matrix1Row = matrix1[rowIndex]
 
-function matrixSubtract(matrix1, matrix2) {
-    return matrix1.map((matrix1Row, rowIndex) => matrix1Row.map((matrix1Value, columnIndex) => matrix1Value - matrix2[rowIndex][columnIndex]));
+        newMatrix.push(transposedMatrix.map(row => dot(matrix1Row, row)))
+    }
+
+    return newMatrix
 }
 
 function scalarMatrixMultiply(scalar, matrix) {
-    return matrix.map(row => row.map(value => scalar * value));
-}
-
-function vectorSubtract(vector1, vector2) {
-
-}
-
-function outerProduct(inputs, deltas) {
+    return matrix.map(vector => scalarVectorMultiply(scalar, vector))
 }
 
 function scalarVectorMultiply(scalar, vector) {
+    return vector.map(value => scalar * value)
 }
 
-function matrixMultiply(matrix1, matrix2) {
+function matrixSubtract(matrix1, matrix2) {
+    return matrix1.map((matrix1Row, rowIndex) => vectorSubtract(matrix1Row, matrix2[rowIndex]))
+}
+
+function vectorSubtract(vector1, vector2) {
+    return vector1.map((vector1Value, index) => vector1Value - vector2[index])
 }
 
 module.exports = {
@@ -81,13 +79,10 @@ module.exports = {
     dotVectorMatrix,
     transpose,
     dot,
-    vectorMultiply,
     vectorSubtract,
     reluToDerivative,
-    outerProduct,
     scalarMatrixMultiply,
     scalarVectorMultiply,
     matrixSubtract,
-    matrixMultiply,
     dotMatrix
 };
