@@ -151,26 +151,6 @@ describe("matrixSubtract", () => {
     });
 });
 
-describe("vectorMultiply", () => {
-    it("should multiply 2 vectors together", () => {
-        const vectorA = [1, 2, 3];
-        const vectorB = [4, 5, 6];
-        const expectedOutput = [4, 10, 18];
-
-        assert.deepEqual(vectorMultiply(vectorA, vectorB), expectedOutput);
-    });
-
-    it("should fail if 2 vectors of different sizes are passed in", () => {
-        const vectorA = [1];
-        const vectorB = [1, 2];
-
-        assert.throws(
-            vectorMultiply.bind(this, vectorA, vectorB),
-            "vectors must be same length"
-        );
-    });
-});
-
 describe("vectorSubtract", () => {
     it("should subtract one vector from the other", () => {
         const vector1 = [10, 20, 30];
@@ -178,29 +158,6 @@ describe("vectorSubtract", () => {
         const expectedOutput = [5, 10, 15];
 
         assert.deepEqual(vectorSubtract(vector1, vector2), expectedOutput);
-    });
-});
-
-describe("outerProduct", () => {
-    it("should turn two vectors into a matrix", () => {
-        const inputs = [1, 2, 3];
-        const deltas = [4, 5, 6];
-        const expectedOutput = [[4, 8, 12], [5, 10, 15], [6, 12, 18]];
-
-        assert.deepEqual(outerProduct(inputs, deltas), expectedOutput);
-    });
-
-    it("should return a matrix that was created from vectors of different sizes", () => {
-        const inputs = [1, 2, 3, 4, 5];
-        const deltas = [6, 7, 8];
-        const expectedOutput = [
-            //input 1, 2, 3, 4, 5
-            [6, 12, 18, 24, 30], // weight 1
-            [7, 14, 21, 28, 35], // weight 2
-            [8, 16, 24, 32, 40] // weight 3
-        ];
-
-        assert.deepEqual(outerProduct(inputs, deltas), expectedOutput);
     });
 });
 
